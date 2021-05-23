@@ -3,11 +3,18 @@
 
 int	get_next_line(int fd, char **line)
 {
-	int		res;
-	char	buf[BUF_SIZE + 1];
+	int			res;
+	char		buf[BUF_SIZE + 1];
+	static char	*str;
 
-	while ((res = read(fd, buf, BUF_SIZE))) {
-		buf[res] = '\0';
+	str = ft_strnew(1);
+	while ((res = read(fd, buf, BUF_SIZE)))
+	{
+		if (ft_strchr(buf, '\n'))
+		{
+			buf[res] = '\0';
+		}
+
 	}
 	return (0);
 }
