@@ -66,3 +66,36 @@ char	*ft_strnew(size_t size)
 		str[size] = '\0';
 	return (str);
 }
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*new;
+	size_t	counter;
+	size_t	place;
+	size_t  s1_len;
+	size_t  s2_len;
+
+	if (!s1 || !s2)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	new = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
+	if (new == NULL)
+		return (NULL);
+	counter = 0;
+	place = 0;
+	while (counter < s1_len)
+	{
+		new[counter] = s1[counter];
+		counter++;
+		place++;
+	}
+	counter = 0;
+	while (counter < s2_len)
+	{
+		new[place + counter] = s2[counter];
+		counter++;
+	}
+	new[place + counter] = '\0';
+	return (new);
+}

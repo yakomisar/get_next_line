@@ -14,5 +14,6 @@ void	ft_putstr(char *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s1);
 char	*ft_strnew(size_t size);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif
