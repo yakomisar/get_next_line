@@ -1,15 +1,5 @@
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
 void	*ft_memset(void *b, int c, size_t len)
 {
 	size_t	i;
@@ -24,16 +14,11 @@ void	*ft_memset(void *b, int c, size_t len)
 	return (b);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	ft_memset(s, 0, n);
-}
-
 void	ft_strclr(char *s)
 {
 	if (s == NULL)
 		return ;
-	ft_bzero(s, ft_strlen(s));
+	ft_memset(s, 0, ft_strlen(s));
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -84,51 +69,30 @@ char	*ft_strnew(size_t size)
 	return (str);
 }
 
-char    *ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-    int i;
-    int j;
-    char *str;
-    i = 0;
-    j = 0;
-    str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-    if (str == NULL)
-        return (NULL);
-    while (s1[i])
-        str[j++] = s1[i++];
-    i = 0;
-    while (s2[i])
-        str[j++] = s2[i++];
-    str[j] = '\0';
-    return (str);
-}
+	char	*str;
+	char	*res;
+	size_t	len;
 
-char	*ft_strcpy(char *dest, char *src)
-{
-	int i;
-
-	i = 0;
-	while (src[i] != '\0')
+	if (s1 == NULL || s2 == NULL)
+		return (NULL);
+	len = ft_strlen(s1) + ft_strlen(s2);
+	if ((str = (char *)malloc(len + 1)) == NULL)
+		return (NULL);
+	res = str;
+	while (*s1)
 	{
-		dest[i] = src[i];
-		i++;
+		*str = *s1;
+		str++;
+		s1++;
 	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-void    *ft_calloc(int a, int b)
-{
-    void    *sum;
-    int res;
-    res = a * b;
-    sum = (void *)malloc(res);
-    if (sum == NULL)
-        return (NULL);
-    while (res > 0)
-    {
-        res--;
-        ((char *)sum)[res] = 0;
-    }
-    return (sum);
+	while (*s2)
+	{
+		*str = *s2;
+		str++;
+		s2++;
+	}
+	*str = '\0';
+	return (res);
 }
