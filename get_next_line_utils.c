@@ -84,35 +84,51 @@ char	*ft_strnew(size_t size)
 	return (str);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char    *ft_strjoin(const char *s1, const char *s2)
 {
-	char	*new;
-	size_t	counter;
-	size_t	place;
-	size_t  s1_len;
-	size_t  s2_len;
+    int i;
+    int j;
+    char *str;
+    i = 0;
+    j = 0;
+    str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+    if (str == NULL)
+        return (NULL);
+    while (s1[i])
+        str[j++] = s1[i++];
+    i = 0;
+    while (s2[i])
+        str[j++] = s2[i++];
+    str[j] = '\0';
+    return (str);
+}
 
-	if (!s1 || !s2)
-		return (NULL);
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	new = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
-	if (new == NULL)
-		return (NULL);
-	counter = 0;
-	place = 0;
-	while (counter < s1_len)
+char	*ft_strcpy(char *dest, char *src)
+{
+	int i;
+
+	i = 0;
+	while (src[i] != '\0')
 	{
-		new[counter] = s1[counter];
-		counter++;
-		place++;
+		dest[i] = src[i];
+		i++;
 	}
-	counter = 0;
-	while (counter < s2_len)
-	{
-		new[place + counter] = s2[counter];
-		counter++;
-	}
-	new[place + counter] = '\0';
-	return (new);
+	dest[i] = '\0';
+	return (dest);
+}
+
+void    *ft_calloc(int a, int b)
+{
+    void    *sum;
+    int res;
+    res = a * b;
+    sum = (void *)malloc(res);
+    if (sum == NULL)
+        return (NULL);
+    while (res > 0)
+    {
+        res--;
+        ((char *)sum)[res] = 0;
+    }
+    return (sum);
 }

@@ -14,7 +14,7 @@ char	*check_remainder(char **str, char **line)
 			*result = '\0';
 			result++;
 			*line = ft_strdup(*str);
-			*str = ft_strdup(result);
+			ft_strcpy(*str, result);
 		}
 		else
 		{
@@ -23,48 +23,52 @@ char	*check_remainder(char **str, char **line)
 		}
 	}
 	else
-	{
 		*line = ft_strnew(1);
-	}
 	return (result);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	int			res;
-	char		buf[BUF_SIZE + 1];
-	static char	*str;
+	char		buf[BUFFER_SIZE + 1];
+	static char	*box;
 	char		*position_n;
-    char        *temp;
+	int			file;
+	char		*temp;
 
-	if (fd < 0 || line == NULL)
-		return (-1);
-	position_n = check_remainder(&str, line);
-    while (!position_n && (res = read(fd, buf, BUF_SIZE)))
+	file = 1;
+	position_n = check_remainder(&box, line);
+	while (!position_n && file > 0)
 	{
-		buf[res] = '\0';
+		file = read(fd, buf, BUFFER_SIZE);
+		if (file >= 0)
+			buf[file] = '\0';
+		else
+			return (-1);
 		position_n = ft_strchr(buf, '\n');
 		if (position_n)
 		{
 			*position_n = '\0';
 			position_n++;
-			str = ft_strdup(position_n);
+			box = ft_strdup(position_n);
 		}
-        temp = *line;
+		temp = *line;
 		*line = ft_strjoin(*line, buf);
-        free(temp);
+		free(temp);
 	}
-	if (ft_strlen(*line) || res)
+	if (ft_strlen(*line) || file)
 		return (1);
 	else
+	{
+		*line = ft_calloc(1,1);
 		return (0);
+	}
 }
 
 int	main(void) {
     int		fd;
     char    *line;
     
-    fd = open("/Users/jmacmill/Desktop/42/gnl/sample.txt", O_RDONLY);
+    fd = open("/Users/olegkomisarenko/Desktop/42/gnl/sample.txt", O_RDONLY);
     if (fd == -1)
     {
         printf("open() unable to open the file");
