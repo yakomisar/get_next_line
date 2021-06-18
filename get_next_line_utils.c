@@ -1,24 +1,15 @@
 #include "get_next_line.h"
 
-void	*ft_memset(void *b, int c, size_t len)
+size_t	ft_strlen(char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (len > 0)
-	{
-		((char *)b)[i] = (unsigned char)c;
+	if (!s)
+		return (0);
+	while (s[i])
 		i++;
-		len--;
-	}
-	return (b);
-}
-
-void	ft_strclr(char *s)
-{
-	if (s == NULL)
-		return ;
-	ft_memset(s, 0, ft_strlen(s));
+	return (i);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -37,7 +28,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*new;
 	size_t	counter;
@@ -57,42 +48,73 @@ char	*ft_strdup(const char *s1)
 	return (new);
 }
 
-char	*ft_strnew(size_t size)
-{
-	char	*str;
+// char    *ft_strjoin(char *s1, char *s2)
+// {
+//     int i;
+//     int j;
+//     char *str;
+//     i = 0;
+//     j = 0;
+//     str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+//     if (str == NULL)
+//         return (NULL);
+//     while (s1[i])
+//         str[j++] = s1[i++];
+//     i = 0;
+//     while (s2[i])
+//         str[j++] = s2[i++];
+//     str[j] = '\0';
+//     return (str);
+// }
 
-	if (!(str = (char *)malloc(sizeof(char) * size + 1)))
+char	*ft_strjoin(char *s1, char *s2)//(char *saved_buf, char *buf)
+{
+	int		i;
+	int		j;
+	size_t	length;
+	char	*res;
+
+	i = 0;
+	j = 0;
+	length = ft_strlen(s1) + ft_strlen(s2);
+	res = malloc(sizeof(char) * (length + 1));
+	if (!res)
 		return (NULL);
-	str[size] = '\0';
-	while (size--)
-		str[size] = '\0';
-	return (str);
+	if (s1)
+	{
+		while (s1[i])
+		{
+			res[i] = s1[i];
+			i++;
+		}
+	}
+	if (s2)
+	{
+		while (s2[j])
+			res[i++] = s2[j++];
+	}
+	res[i] = '\0';
+	printf("Address of box in strjoin: %p\n", &s1);
+	printf("Address of box in strjoin: %p\n", s1);
+	printf("Value of box: %s\n\n", s1);
+	if (s1)
+	    free(s1);
+	printf("Address of box after free: %p\n", &s1);
+	printf("Address of box after free: %p\n", s1);
+	printf("Value of box: %s\n\n", s1);
+	return (res);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strcpy(char *dest, char *src)
 {
-	char	*str;
-	char	*res;
-	size_t	len;
+	int i;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	if ((str = (char *)malloc(len + 1)) == NULL)
-		return (NULL);
-	res = str;
-	while (*s1)
+	i = 0;
+	while (src[i] != '\0')
 	{
-		*str = *s1;
-		str++;
-		s1++;
+		dest[i] = src[i];
+		i++;
 	}
-	while (*s2)
-	{
-		*str = *s2;
-		str++;
-		s2++;
-	}
-	*str = '\0';
-	return (res);
+	dest[i] = '\0';
+	return (dest);
 }

@@ -1,104 +1,67 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-size_t	ft_strlen(const char *str)
+int	save_line(char **line, char **box)
 {
-	size_t	i;
+	char	*position_n;
+	int		result;
 
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-char *ft_strcpy(char *dest, char *src)
-{
-	int i;
-
-	i = 0;
-	while (src[i] != '\0')
+	position_n = ft_strchr(*box, '\n');
+	if (position_n)
 	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	*check_remainder(char **str, char **line)
-{
-	char		*result;
-
-	result = NULL;
-	if (*str)
-	{
-		result = ft_strchr(*str, '\n');
-		if (result)
-		{
-			*result = '\0';
-			result++;
-			*line = ft_strdup(*str);
-			ft_strcpy(*str, result);
-		}
-		else
-		{
-			*line = ft_strdup(*str);
-			free(*str);
-			*str = NULL;
-		}
+		*position_n = '\0';
+		*line = ft_strdup(*box);
+		position_n++;
+		ft_strcpy(*box, position_n);
+		result = 1;
 	}
 	else
 	{
-		*line = ft_strnew(1);
+		*line = ft_strdup(*box);
+		free(*box);
+		*box = NULL;
+		result = 0;
 	}
 	return (result);
 }
 
-int	get_result(char *str, int res)
-{
-	if (str || res)
-		return (1);
-	else
-		return (0);
-}
-
 int	get_next_line(int fd, char **line)
 {
-	int			res;
 	char		buf[BUFFER_SIZE + 1];
-	static char	*str;
+	static char	*box;
 	char		*position_n;
 	char		*temp;
+	int			file;
 
 	if (fd < 0 || !line || BUFFER_SIZE <= 0 || (read(fd, NULL, 0) < 0))
 		return (-1);
-	position_n = check_remainder(&str, line);
-	res = 1;
-	while (!position_n && (res > 0))
+	file = 1;
+	while (file > 0)
 	{
-		res = read(fd, buf, BUFFER_SIZE);
-		buf[res] = '\0';
-		position_n = ft_strchr(buf, '\n');
+		file = read(fd, buf, BUFFER_SIZE);
+		if (file >= 0)
+			buf[file] = '\0';
+		else
+			return (-1);
+		printf("Address of box in get_next_line: %p\n", &box);
+		printf("Address of box in get_next_line: %p\n", box);
+		printf("Value of box: %s\n\n", box);
+		box = ft_strjoin(box, buf);
+		printf("Address of box in get_next_line: %p\n", &box);
+		printf("Address of box in get_next_line: %p\n", box);
+		printf("Value of box: %s\n\n", box);
+		position_n = ft_strchr(box, '\n');
 		if (position_n)
-		{
-			*position_n = '\0', position_n++;
-			str = ft_strdup(position_n);
-		}
-		temp = *line;
-		*line = ft_strjoin(*line, buf);
-		free(temp);
+			break ;
 	}
-	if (ft_strlen(*line))
-        return (1);
-	return (0);
+	return (save_line(line, &box));
 }
 
 int	main(void) {
     int		fd;
     char    *line;
     
-    fd = open("/Users/jmacmill/Desktop/42/gnl/sample.txt", O_RDONLY);
-	//fd = open("/Users/jmacmill/Desktop/42/gnl/41_no_nl", O_RDONLY);
+    fd = open("/Users/olegkomisarenko/Desktop/42/get_next_line/sample.txt", O_RDONLY);
     if (fd == -1)
     {
         printf("open() unable to open the file");
@@ -111,6 +74,5 @@ int	main(void) {
         printf("close() error");
         return (1);
     }
-	sleep(10);
     return (0);
 }
