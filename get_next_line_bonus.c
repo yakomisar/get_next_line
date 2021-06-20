@@ -1,5 +1,5 @@
 #include "get_next_line_bonus.h"
-// #include <stdio.h>
+#include <stdio.h>
 
 void	ft_strdel(char **as)
 {
@@ -10,6 +10,19 @@ void	ft_strdel(char **as)
 		free(*as);
 		*as = NULL;
 	}
+}
+
+GNL	*ft_lstnew(int fd)
+{
+	GNL	*head;
+
+	head = (GNL *)malloc(sizeof(GNL));
+	if (head == NULL)
+		return (NULL);
+	head->fd = fd;
+	head->box = NULL;
+	head->next = NULL;
+	return (head);
 }
 
 int	save_line(char **line, char **box)
@@ -90,26 +103,31 @@ int	get_next_line(int fd, char **line)
 		temp = temp->next;	
 	}
 	result = get_line(temp->fd, line, &temp->box);
-	
 	return (result);
 }
 
-// int	main(void) {
-//     int		fd;
-//     char    *line;
+int	main(void) {
+    int		fd;
+    char    *line;
+	int		res;
     
-//     fd = open("/Users/olegkomisarenko/Desktop/42/empty", O_RDONLY);
-//     if (fd == -1)
-//     {
-//         printf("open() unable to open the file");
-//         return (1);
-//     }
-//     while ((get_next_line(fd, &line)))
-//         printf("Result # : %s\n", line);
-//     if (close(fd) == -1)
-//     {
-//         printf("close() error");
-//         return (1);
-//     }
-//     return (0);
-// }
+    fd = open("/Users/jmacmill/Desktop/42/get_next_line/sample.txt", O_RDONLY);
+    if (fd == -1)
+    {
+        printf("open() unable to open the file");
+        return (1);
+    }
+    while ((res = get_next_line(fd, &line)))
+	{
+        printf("Result %d : %s\n", res, line);
+		free(line);
+	}
+	printf("Result %d : %s\n", res, line);
+	free(line);
+	if (close(fd) == -1)
+    {
+        printf("close() error");
+        return (1);
+    }
+    return (0);
+}

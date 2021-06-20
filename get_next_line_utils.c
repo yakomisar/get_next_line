@@ -48,60 +48,37 @@ char	*ft_strdup(char *s1)
 	return (new);
 }
 
-// char    *ft_strjoin(char *s1, char *s2)
-// {
-//     int i;
-//     int j;
-//     char *str;
-//     i = 0;
-//     j = 0;
-//     str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-//     if (str == NULL)
-//         return (NULL);
-//     while (s1[i])
-//         str[j++] = s1[i++];
-//     i = 0;
-//     while (s2[i])
-//         str[j++] = s2[i++];
-//     str[j] = '\0';
-//     return (str);
-// }
-
-char	*ft_strjoin(char *s1, char *s2)//(char *saved_buf, char *buf)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		j;
-	size_t	length;
 	char	*res;
 
 	i = 0;
 	j = 0;
-	length = ft_strlen(s1) + ft_strlen(s2);
-	res = malloc(sizeof(char) * (length + 1));
+	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!res)
 		return (NULL);
 	if (s1)
 	{
 		while (s1[i])
-		{
-			res[i] = s1[i];
-			i++;
-		}
+			res[j++] = s1[i++];
 	}
+	i = 0;
 	if (s2)
 	{
-		while (s2[j])
-			res[i++] = s2[j++];
+		while (s2[i])
+			res[j++] = s2[i++];
 	}
-	res[i] = '\0';
+	res[j] = '\0';
 	if (s1)
-	    free(s1);
+		free(s1);
 	return (res);
 }
 
 char	*ft_strcpy(char *dest, char *src)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (src[i] != '\0')

@@ -1,5 +1,4 @@
 #include "get_next_line_bonus.h"
-//#include <stdio.h>
 
 size_t	ft_strlen(char *s)
 {
@@ -11,19 +10,6 @@ size_t	ft_strlen(char *s)
 	while (s[i])
 		i++;
 	return (i);
-}
-
-GNL	*ft_lstnew(int fd)
-{
-	GNL	*head;
-
-	head = (GNL *)malloc(sizeof(GNL));
-	if (head == NULL)
-		return (NULL);
-	head->fd = fd;
-	head->box = NULL;
-	head->next = NULL;
-	return (head);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -66,37 +52,33 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		j;
-	size_t	length;
 	char	*res;
 
 	i = 0;
 	j = 0;
-	length = ft_strlen(s1) + ft_strlen(s2);
-	res = malloc(sizeof(char) * (length + 1));
+	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!res)
 		return (NULL);
 	if (s1)
 	{
 		while (s1[i])
-		{
-			res[i] = s1[i];
-			i++;
-		}
+			res[j++] = s1[i++];
 	}
+	i = 0;
 	if (s2)
 	{
-		while (s2[j])
-			res[i++] = s2[j++];
+		while (s2[i])
+			res[j++] = s2[i++];
 	}
-	res[i] = '\0';
+	res[j] = '\0';
 	if (s1)
-	    free(s1);
+		free(s1);
 	return (res);
 }
 
 char	*ft_strcpy(char *dest, char *src)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (src[i] != '\0')

@@ -1,4 +1,0 @@
-title("multiple fd: ")
-        fd[0] = open("files/41_with_nl", O_RDWR);
-        /* 1 */ gnl(1000, -1, NULL);
-        /* 2 */ gnl(fd[0], 1, "0123456789012345678901234567890123456789");

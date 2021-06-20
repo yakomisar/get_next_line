@@ -1,19 +1,19 @@
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
-//# define BUFFER_SIZE 1
+# define BUFFER_SIZE 1
 
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
 # include <fcntl.h>
 
-typedef struct get_next_line
+typedef struct s_get_next_line
 {
-    int     fd;
-    char    *box;   
-    struct get_next_line    *next;
-}               GNL;
+    int						fd;
+    char					*box;   
+    struct s_get_next_line	*next;
+}							GNL;
 
 // Additional functions
 char	*ft_strchr(const char *s, int c);

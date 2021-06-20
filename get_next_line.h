@@ -7,14 +7,13 @@
 # include <unistd.h>
 # include <string.h>
 # include <fcntl.h>
-# include <stdio.h>
 
 // Additional functions
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(char *s1);
-char    *ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(char *str);
-int     get_next_line(int fd, char **line);
-char    *ft_strcpy(char *dest, char *src);
+int		get_next_line(int fd, char **line);
+char	*ft_strcpy(char *dest, char *src);
 
 #endif
