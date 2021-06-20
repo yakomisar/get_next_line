@@ -1,5 +1,16 @@
-#include "get_next_line.h"
-//#include <stdio.h>
+#include "get_next_line_bonus.h"
+// #include <stdio.h>
+
+void	ft_strdel(char **as)
+{
+	if (!as)
+		return ;
+	if (*as)
+	{
+		free(*as);
+		*as = NULL;
+	}
+}
 
 int	save_line(char **line, char **box)
 {
@@ -18,22 +29,33 @@ int	save_line(char **line, char **box)
 	else
 	{
 		*line = ft_strdup(*box);
-		free(*box);
-		*box = NULL;
+		ft_strdel(box);
 		result = 0;
 	}
 	return (result);
 }
 
-int	get_next_line(int fd, char **line)
+void	ft_strclr(char *s)
+{
+	int i;
+
+	i = 0;
+	if (s)
+	{
+		while (s[i])
+		{
+			s[i] = '\0';
+			i++;
+		}
+	}
+}
+
+int	get_line(int fd, char **line, char **box)
 {
 	char		buf[BUFFER_SIZE + 1];
-	static char	*box;
 	char		*position_n;
 	int			file;
 
-	if (fd < 0 || !line || BUFFER_SIZE <= 0 || (read(fd, NULL, 0) < 0))
-		return (-1);
 	file = 1;
 	while (file > 0)
 	{
@@ -42,19 +64,41 @@ int	get_next_line(int fd, char **line)
 			buf[file] = '\0';
 		else
 			return (-1);
-		box = ft_strjoin(box, buf);
-		position_n = ft_strchr(box, '\n');
+		*box = ft_strjoin(*box, buf);
+		position_n = ft_strchr(*box, '\n');
 		if (position_n)
 			break ;
 	}
-	return (save_line(line, &box));
+	return (save_line(line, box));
+}
+
+int	get_next_line(int fd, char **line)
+{
+	static GNL	*head;
+	GNL			*temp;
+	int			result;
+	
+	if (fd < 0 || !line || BUFFER_SIZE <= 0 || (read(fd, NULL, 0) < 0))
+		return (-1);
+	if (head == NULL)
+		head = ft_lstnew(fd);
+	temp = head;
+	while (temp->fd != fd)
+	{
+		if (temp->next == NULL)
+			temp = ft_lstnew(fd);
+		temp = temp->next;	
+	}
+	result = get_line(temp->fd, line, &temp->box);
+	
+	return (result);
 }
 
 // int	main(void) {
 //     int		fd;
 //     char    *line;
     
-//     fd = open("/Users/olegkomisarenko/Desktop/42/get_next_line/sample.txt", O_RDONLY);
+//     fd = open("/Users/olegkomisarenko/Desktop/42/empty", O_RDONLY);
 //     if (fd == -1)
 //     {
 //         printf("open() unable to open the file");
