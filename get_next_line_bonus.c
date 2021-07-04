@@ -1,29 +1,4 @@
 #include "get_next_line_bonus.h"
-#include <stdio.h>
-
-void	ft_strdel(char **as)
-{
-	if (!as)
-		return ;
-	if (*as)
-	{
-		free(*as);
-		*as = NULL;
-	}
-}
-
-GNL	*ft_lstnew(int fd)
-{
-	GNL	*head;
-
-	head = (GNL *)malloc(sizeof(GNL));
-	if (head == NULL)
-		return (NULL);
-	head->fd = fd;
-	head->box = NULL;
-	head->next = NULL;
-	return (head);
-}
 
 int	save_line(char **line, char **box)
 {
@@ -42,33 +17,22 @@ int	save_line(char **line, char **box)
 	else
 	{
 		*line = ft_strdup(*box);
-		ft_strdel(box);
+		free(*box);
+		*box = NULL;
 		result = 0;
 	}
 	return (result);
 }
 
-void	ft_strclr(char *s)
-{
-	int i;
-
-	i = 0;
-	if (s)
-	{
-		while (s[i])
-		{
-			s[i] = '\0';
-			i++;
-		}
-	}
-}
-
-int	get_line(int fd, char **line, char **box)
+int	get_next_line(int fd, char **line)
 {
 	char		buf[BUFFER_SIZE + 1];
+	static char	*box[1024];
 	char		*position_n;
 	int			file;
 
+	if (fd < 0 || !line || BUFFER_SIZE < 1)
+		return (-1);
 	file = 1;
 	while (file > 0)
 	{
@@ -77,57 +41,10 @@ int	get_line(int fd, char **line, char **box)
 			buf[file] = '\0';
 		else
 			return (-1);
-		*box = ft_strjoin(*box, buf);
-		position_n = ft_strchr(*box, '\n');
+		box[fd] = ft_strjoin(box[fd], buf);
+		position_n = ft_strchr(box[fd], '\n');
 		if (position_n)
 			break ;
 	}
-	return (save_line(line, box));
-}
-
-int	get_next_line(int fd, char **line)
-{
-	static GNL	*head;
-	GNL			*temp;
-	int			result;
-	
-	if (fd < 0 || !line || BUFFER_SIZE <= 0 || (read(fd, NULL, 0) < 0))
-		return (-1);
-	if (head == NULL)
-		head = ft_lstnew(fd);
-	temp = head;
-	while (temp->fd != fd)
-	{
-		if (temp->next == NULL)
-			temp = ft_lstnew(fd);
-		temp = temp->next;	
-	}
-	result = get_line(temp->fd, line, &temp->box);
-	return (result);
-}
-
-int	main(void) {
-    int		fd;
-    char    *line;
-	int		res;
-    
-    fd = open("/Users/jmacmill/Desktop/42/get_next_line/sample.txt", O_RDONLY);
-    if (fd == -1)
-    {
-        printf("open() unable to open the file");
-        return (1);
-    }
-    while ((res = get_next_line(fd, &line)))
-	{
-        printf("Result %d : %s\n", res, line);
-		free(line);
-	}
-	printf("Result %d : %s\n", res, line);
-	free(line);
-	if (close(fd) == -1)
-    {
-        printf("close() error");
-        return (1);
-    }
-    return (0);
+	return (save_line(line, &box[fd]));
 }

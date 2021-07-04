@@ -32,7 +32,7 @@ int	get_next_line(int fd, char **line)
 	char		*position_n;
 	int			file;
 
-	if (fd < 0 || !line || BUFFER_SIZE <= 0 || (read(fd, NULL, 0) < 0))
+	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (-1);
 	file = 1;
 	while (file > 0)
@@ -53,20 +53,24 @@ int	get_next_line(int fd, char **line)
 int	main(void) {
     int		fd;
     char    *line;
+	int		res;
+	int		counter;
     
-    fd = open("/Users/jmacmill/Desktop/42/get_next_line/sample.txt", O_RDONLY);
+    fd = open("/Users/jmacmill/Desktop/check/sample.txt", O_RDONLY);
+	counter = 0;
     if (fd == -1)
     {
         printf("open() unable to open the file");
         return (1);
     }
-    while ((get_next_line(fd, &line)))
+    while ((res = get_next_line(fd, &line)) && counter < 2)
 	{
-        printf("Result # : %s\n", line);
+        printf("Result %d : %s\n", res, line);
+		counter++;
 		free(line);
 	}
 	free(line);
-    if (close(fd) == -1)
+	if (close(fd) == -1)
     {
         printf("close() error");
         return (1);
