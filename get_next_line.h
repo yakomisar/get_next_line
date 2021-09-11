@@ -6,8 +6,6 @@
 # include <unistd.h>
 # include <fcntl.h>
 
-# define BUFFER_SIZE 42
-
 // Additional functions
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(char *s1);

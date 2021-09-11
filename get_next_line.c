@@ -1,5 +1,4 @@
 #include "get_next_line.h"
-#include <stdio.h>
 
 int	save_line(char **line, char **box)
 {
@@ -48,32 +47,4 @@ int	get_next_line(int fd, char **line)
 			break ;
 	}
 	return (save_line(line, &box));
-}
-
-int	main(void) {
-    int		fd;
-    char    *line;
-	int		res;
-	int		counter;
-    
-    fd = open("/Users/jmacmill/Desktop/check/sample.txt", O_RDONLY);
-	counter = 0;
-    if (fd == -1)
-    {
-        printf("open() unable to open the file");
-        return (1);
-    }
-    while ((res = get_next_line(fd, &line)) && counter < 2)
-	{
-        printf("Result %d : %s\n", res, line);
-		counter++;
-		free(line);
-	}
-	free(line);
-	if (close(fd) == -1)
-    {
-        printf("close() error");
-        return (1);
-    }
-    return (0);
 }
